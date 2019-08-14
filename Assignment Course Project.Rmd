@@ -1,0 +1,72 @@
+---
+title: "Assignment Week3"
+author: "Margerys Salgado"
+date: "25/5/2019"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Assignment: Course Project
+
+This peer assessed assignment has two parts. 
+First, you will create a Shiny application and deploy it on Rstudio's servers. 
+Second, you will use Slidify or Rstudio Presenter to prepare a reproducible pitch presentation about your application.
+
+Your Shiny Application:
+
+1. Write a shiny application with associated supporting documentation. The documentation should be thought of as whatever a user will need to get started using your application.
+2. Deploy the application on Rstudio's shiny server
+3. Share the application link by pasting it into the provided text box
+4. Share your server.R and ui.R code on github
+
+## How to use the application
+This application predicts the horsepower of a car given the fuel efficiency in miles per gallon for the car.
+
+## Data to Use
+```{r, comment= "", echo=TRUE}
+rm(list=ls())
+
+summary(cars)
+names(cars)
+```
+
+## Plot
+```{r, comment= "", echo=TRUE}
+library(ggplot2)
+library(plotly)
+
+p <- ggplot(data=cars, aes(speed, dist)) + 
+  geom_point(stat = "identity") +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+## Reactive App
+```{r, comment="", warning=F, message=F, echo=T}
+library(shiny)
+
+shinyUI(fluidPage(
+  titlePanel("Predict Horsepower from MPG"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("sliderMPG", "What is the MPG of the car?", 10, 35, value=20),
+      checkboxInput("ShowModel1", "Show/Hide Model1", value = TRUE),
+      checkboxInput("ShowModel2", "Show/Hide Model2", value = TRUE)
+    ),
+    mainPanel(
+      plotOutput("Plot1"),
+      h3("Predicted Horsepower from Model1:"),
+      textOutput("pred1"),
+      h3("Predicted Horsepower from Model2:"),
+      textOutput("pred2")
+    )
+  )
+))
+      
+```
